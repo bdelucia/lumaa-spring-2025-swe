@@ -31,11 +31,15 @@ psql -U <username>
 ```
 createdb <dbname>
 ```
-4. Create the users table by pasting this command:
+4. Connect to the created database:
+```
+\c <dbname>
+```
+5. Create the users table by pasting this command:
 ```
 CREATE TABLE users (    id SERIAL PRIMARY KEY,    username VARCHAR(50) UNIQUE NOT NULL,    password_hash VARCHAR(255) NOT NULL);
 ```
-5. In ./backend/.env.example, update DB_USER, DB_PASSWORD and DB_NAME with your PSQL username, password and database name respectively.
+6. In ./backend/.env.example, update DB_USER, DB_PASSWORD and DB_NAME with your PSQL username, password and database name respectively.
 ```
 DB_USER=postgres
 DB_PASSWORD=your_password_here
