@@ -23,6 +23,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       console.log('Response:', response.data);
 
       if (response.data.success) {
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('username', response.data.username);
+        }
         setMessage(
           `${type === 'login' ? 'Logged in' : 'Registered'} successfully!`
         );
@@ -38,6 +42,27 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
       }
     }
   };
+
+  const isLoggedIn = () => {
+    return localStorage.getItem('token') !== null;
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    setMessage('Logged out successfully');
+  };
+
+  // If user is logged in, show logout option
+  if (isLoggedIn() && type === 'login') {
+    return (
+      <div className="auth-form">
+        <p>Welcome, {localStorage.getItem('username')}!</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    );
+  }
 
   return (
     <div className="auth-form">

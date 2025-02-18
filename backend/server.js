@@ -4,8 +4,11 @@ const { Pool } = pkg;
 import bcrypt from 'bcrypt';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
+
+const JWT_SECRET = 'god-dangit-bobbeh';
 
 const app = express();
 app.use(express.json());
@@ -113,9 +116,18 @@ app.post('/auth/login', async (req, res) => {
       });
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: result.rows[0].id, username: result.rows[0].username },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     res.json({
       success: true,
       userId: result.rows[0].id,
+      username: result.rows[0].username,
+      token,
       message: 'Login successful',
     });
   } catch (error) {
@@ -124,27 +136,6 @@ app.post('/auth/login', async (req, res) => {
       success: false,
       message: 'Server error during login',
     });
-  }
-});
-
-// Test endpoint to check database connection
-app.get('/test-db', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ success: true, time: result.rows[0].now });
-  } catch (error) {
-    console.error('Test DB error:', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-// List all users (for debugging)
-app.get('/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT id, username FROM users');
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 });
 
