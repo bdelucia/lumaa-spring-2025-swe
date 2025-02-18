@@ -29,12 +29,8 @@ pool.query('SELECT NOW()', (err, res) => {
   }
 });
 
-app.get('/test', (req, res) => {
-  res.json({ message: 'Backend is working!' });
-});
-
 // Register endpoint
-app.post('/register', async (req, res) => {
+app.post('/auth/register', async (req, res) => {
   console.log('Register request received:', req.body); // Debug log
 
   try {
@@ -88,7 +84,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Login endpoint
-app.post('/login', async (req, res) => {
+app.post('/auth/login', async (req, res) => {
   console.log('Login request received:', req.body); // Debug log
 
   try {
@@ -152,7 +148,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

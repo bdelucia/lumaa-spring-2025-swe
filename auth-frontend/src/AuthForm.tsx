@@ -14,18 +14,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     try {
       console.log('Attempting to', type, 'with username:', username);
 
-      // Test backend connection first
-      try {
-        const testResponse = await axios.get(`${API_URL}/test`);
-        console.log('Backend test response:', testResponse.data);
-      } catch (error) {
-        console.error('Backend connection test failed:', error);
-        setMessage('Cannot connect to server');
-        return;
-      }
-
       // Proceed with registration/login
-      const response = await axios.post(`${API_URL}/${type}`, {
+      const response = await axios.post(`${API_URL}/auth/${type}`, {
         username,
         password,
       });
